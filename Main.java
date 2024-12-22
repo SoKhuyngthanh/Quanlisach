@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+
+
 public class Main {
     public static void main(String args[]) {
         Scanner scan = new Scanner(System.in);
@@ -11,7 +13,7 @@ public class Main {
         // Tao Map chua danh sach nguoi dung voi thong tin ten dang nhap, mat khau va quyen
         Map<String, User> users = new HashMap<>();
         users.put("Nhat Huy", new User("Nhat Huy", "nhathuy123", Role.ADMIN));  // Quan tri vien
-        users.put("Bao Huy", new User("Bao Huy", "baohuy123", Role.ADMIN));      // Quan tri vien
+        users.put("Bao Huy", new User("Bao Huy", "1", Role.ADMIN));      // Quan tri vien
         users.put("Trang", new User("Trang", "trang123", Role.USER));            // Nguoi dung
         users.put("Vu", new User("Vu", "vu123", Role.USER));                    // Nguoi dung
         users.put("Ha", new User("Ha", "ha123", Role.USER));                    // Nguoi dung
@@ -47,9 +49,10 @@ public class Main {
         while (!exit) {
             System.out.println("1/ Them tai lieu");
             System.out.println("2/ Xoa tai lieu");
-            System.out.println("3/ Hien thi thong tin tai lieu");
-            System.out.println("4/ Hien thi tai lieu theo loai");
-            System.out.println("5/ Thoat");
+            System.out.println("3/ Sua tai lieu");
+            System.out.println("4/ Hien thi thong tin tai lieu");
+            System.out.println("5/ Hien thi tai lieu theo loai");
+            System.out.println("6/ Thoat");
 
             // Chi hien thi tuy chon quan ly tai khoan nguoi dung neu la Admin
             if (currentUser.getRole() == Role.ADMIN) {
@@ -76,20 +79,26 @@ public class Main {
                         System.out.println("Ban khong co quyen xoa tai lieu.");
                     }
                     break;
-
-                case 3: // Hien thi thong tin tai lieu
+                case 3: // Sửa tài liệu
+                    if (currentUser.getRole() == Role.ADMIN) {
+                        editDocument(scan, xaptailieu1);
+                    } else {
+                        System.out.println("Ban khong co quyen sua tai lieu.");
+                    }
+                    break;
+                case 4: // Hien thi thong tin tai lieu
                     displayDocuments(xaptailieu1);
                     break;
 
-                case 4: // Hien thi tai lieu theo loai
+                case 5: // Hien thi tai lieu theo loai
                     displayDocumentsByType(scan, xaptailieu1);
                     break;
 
-                case 5: // Thoat
+                case 6: // Thoat
                     exit = true;
                     break;
 
-                case 6: // Quan ly tai khoan nguoi dung (Admin only)
+                case 7: // Quan ly tai khoan nguoi dung (Admin only)
                     if (currentUser.getRole() == Role.ADMIN) {
                         manageUsers(scan);
                     } else {
@@ -104,6 +113,82 @@ public class Main {
             System.out.println("-------------------------------------------");
         }
         scan.close();
+    }
+
+    private static void editDocument(Scanner scan, DocumentManagement xaptailieu1) {
+        System.out.print("Nhap ma tai lieu muon sua: ");
+        String id = scan.nextLine(); // Nhập id tài liệu
+
+        // Tìm tài liệu theo id
+        Document doc = xaptailieu1.getDocuments().stream()
+                .filter(d -> d.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (doc == null) {
+            System.out.println("Khong tim thay tai lieu voi ID: " + id);
+            return; // Nếu không tìm thấy tài liệu, kết thúc hàm
+        }
+
+        System.out.println("Tai lieu hien tai:");
+        doc.display(); // Hiển thị thông tin tài liệu hiện tại
+
+        // Hỏi người dùng có muốn sửa tài liệu không
+        System.out.println("Ban co muon sua tai lieu nay? (y/n): ");
+        String confirmation = scan.nextLine();
+
+        if ("y".equalsIgnoreCase(confirmation)) {
+            // Tạo một tài liệu mới để thay thế
+            Document newDoc = null;
+
+            if (doc instanceof Book) {
+                // Cập nhật cho sách
+                System.out.print("Nhap nha xuat ban moi: ");
+                String name_nxb = scan.nextLine();
+                System.out.print("Nhap so luong phat hanh moi: ");
+                int release_num = Integer.parseInt(scan.nextLine());
+                System.out.print("Nhap ten sach moi: ");
+                String name_book = scan.nextLine();
+                System.out.print("Nhap tac gia moi: ");
+                String name_author = scan.nextLine();
+                System.out.print("Nhap so trang moi: ");
+                int num_page = Integer.parseInt(scan.nextLine());
+
+                newDoc = new Book(id, name_nxb, release_num, name_book, name_author, num_page);
+            } else if (doc instanceof Magezine) {
+                // Cập nhật cho tạp chí
+                System.out.print("Nhap nha xuat ban moi: ");
+                String name_nxb = scan.nextLine();
+                System.out.print("Nhap so luong phat hanh moi: ");
+                int release_num = Integer.parseInt(scan.nextLine());
+                System.out.print("Nhap ma phat hanh moi: ");
+                int id_release = Integer.parseInt(scan.nextLine());
+                System.out.print("Nhap thang phat hanh moi: ");
+                int month_release = Integer.parseInt(scan.nextLine());
+
+                newDoc = new Magezine(id, name_nxb, release_num, id_release, month_release);
+            } else if (doc instanceof Newspaper) {
+                // Cập nhật cho báo
+                System.out.print("Nhap nha xuat ban moi: ");
+                String name_nxb = scan.nextLine();
+                System.out.print("Nhap so luong phat hanh moi: ");
+                int release_num = Integer.parseInt(scan.nextLine());
+                System.out.print("Nhap ngay phat hanh moi: ");
+                int day_release = Integer.parseInt(scan.nextLine());
+
+                newDoc = new Newspaper(id, name_nxb, release_num, day_release);
+            }
+
+            // Thực hiện cập nhật tài liệu mới vào danh sách
+            if (newDoc != null) {
+                xaptailieu1.editDocument(id, newDoc);  // Gọi phương thức sửa tài liệu
+                System.out.println("Tai lieu da duoc sua thanh cong!");
+            } else {
+                System.out.println("Sửa tài liệu không thành công.");
+            }
+        } else {
+            System.out.println("Hủy sửa tài liệu.");
+        }
     }
 
     private static void addDocument(Scanner scan, DocumentManagement xaptailieu1) {
