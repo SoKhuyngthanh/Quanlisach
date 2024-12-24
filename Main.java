@@ -1,9 +1,8 @@
 package quan_ly_tai_lieu;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-
 
 public class Main {
     public static void main(String args[]) {
@@ -12,8 +11,8 @@ public class Main {
 
         // Tao Map chua danh sach nguoi dung voi thong tin ten dang nhap, mat khau va quyen
         Map<String, User> users = new HashMap<>();
-        users.put("Nhat Huy", new User("Nhat Huy", "nhathuy123", Role.ADMIN));  // Quan tri vien
-        users.put("Bao Huy", new User("Bao Huy", "1", Role.ADMIN));      // Quan tri vien
+        users.put("NhatHuy", new User("NhatHuy", "nhathuy123", Role.ADMIN));  // Quan tri vien
+        users.put("BaoHuy", new User("BaoHuy", "1", Role.ADMIN));      // Quan tri vien
         users.put("Trang", new User("Trang", "trang123", Role.USER));            // Nguoi dung
         users.put("Vu", new User("Vu", "vu123", Role.USER));                    // Nguoi dung
         users.put("Ha", new User("Ha", "ha123", Role.USER));                    // Nguoi dung
@@ -24,40 +23,39 @@ public class Main {
         boolean isLoggedIn = false;
         while (!isLoggedIn) {
             System.out.println("Dang nhap");
-            System.out.print("Nhap ten nguoi dung: ");
+            System.out.print(" - Nhap ten nguoi dung: ");
             String username = scan.nextLine();
-            System.out.print("Nhap mat khau: ");
+            System.out.print(" - Nhap mat khau: ");
             String password = scan.nextLine();
 
             // Kiem tra thong tin dang nhap
             if (users.containsKey(username)) {
                 User user = users.get(username);
-                if (user.authenticate(password)) {
+                if (user.kiemtraPassword(password)) {
                     currentUser = user;
                     isLoggedIn = true;
                     System.out.println("Dang nhap thanh cong voi quyen " + (currentUser.getRole() == Role.ADMIN ? "Quan tri vien" : "Nguoi dung"));
                 } else {
-                    System.out.println("Mat khau khong dung. Vui long thu lai.");
+                    System.out.println("Mat khau khong dung. Vui long thu lai!");
+                    System.out.println("-------------------------------------------");
                 }
             } else {
-                System.out.println("Ten nguoi dung khong ton tai. Vui long thu lai.");
+                System.out.println("Ten nguoi dung khong ton tai. Vui long thu lai!");
+                System.out.println("-------------------------------------------");
             }
         }
+
+        System.out.println();
 
         // Chuong trinh menu chinh
         boolean exit = false;
         while (!exit) {
-            System.out.println("1/ Them tai lieu");
-            System.out.println("2/ Xoa tai lieu");
-            System.out.println("3/ Sua tai lieu");
-            System.out.println("4/ Hien thi thong tin tai lieu");
-            System.out.println("5/ Hien thi tai lieu theo loai");
-            System.out.println("6/ Thoat");
+            System.out.println("1. Them tai lieu");
+            System.out.println("2. Xoa tai lieu");
+            System.out.println("3. Sua tai lieu");
+            System.out.println("4. Hien thi tai lieu");
+            System.out.println("5. Thoat");
 
-            // Chi hien thi tuy chon quan ly tai khoan nguoi dung neu la Admin
-            if (currentUser.getRole() == Role.ADMIN) {
-                System.out.println("6/ Quan ly tai khoan nguoi dung");
-            }
             System.out.println();
             System.out.print("Chon chuc nang: ");
             int option = scan.nextInt();
@@ -68,37 +66,34 @@ public class Main {
                     if (currentUser.getRole() == Role.ADMIN) {
                         addDocument(scan, xaptailieu1);
                     } else {
-                        System.out.println("Ban khong co quyen them tai lieu.");
+                        System.out.println("Ban khong co quyen them tai lieu!");
                     }
                     break;
-
+    
                 case 2: // Xoa tai lieu
                     if (currentUser.getRole() == Role.ADMIN) {
                         deleteDocument(scan, xaptailieu1);
                     } else {
-                        System.out.println("Ban khong co quyen xoa tai lieu.");
+                        System.out.println("Ban khong co quyen xoa tai lieu!");
                     }
                     break;
+
                 case 3: // Sửa tài liệu
                     if (currentUser.getRole() == Role.ADMIN) {
                         editDocument(scan, xaptailieu1);
                     } else {
-                        System.out.println("Ban khong co quyen sua tai lieu.");
+                        System.out.println("Ban khong co quyen sua tai lieu!");
                     }
                     break;
                 case 4: // Hien thi thong tin tai lieu
-                    displayDocuments(xaptailieu1);
+                    displayDocuments(scan, xaptailieu1);
                     break;
 
-                case 5: // Hien thi tai lieu theo loai
-                    displayDocumentsByType(scan, xaptailieu1);
-                    break;
-
-                case 6: // Thoat
+                case 5: // Thoat
                     exit = true;
                     break;
 
-                case 7: // Quan ly tai khoan nguoi dung (Admin only)
+                case 6: // Quan ly tai khoan nguoi dung (Admin only)
                     if (currentUser.getRole() == Role.ADMIN) {
                         manageUsers(scan);
                     } else {
@@ -110,7 +105,6 @@ public class Main {
                     System.out.println("Lua chon khong hop le. Vui long thu lai.");
                     break;
             }
-            System.out.println("-------------------------------------------");
         }
         scan.close();
     }
@@ -143,38 +137,41 @@ public class Main {
 
             if (doc instanceof Book) {
                 // Cập nhật cho sách
-                System.out.print("Nhap nha xuat ban moi: ");
+                System.out.print(" - Nhap nha xuat ban moi: ");
                 String name_nxb = scan.nextLine();
-                System.out.print("Nhap so luong phat hanh moi: ");
+                System.out.print(" - Nhap so luong phat hanh moi: ");
                 int release_num = Integer.parseInt(scan.nextLine());
-                System.out.print("Nhap ten sach moi: ");
+                System.out.print(" - Nhap ten sach moi: ");
                 String name_book = scan.nextLine();
-                System.out.print("Nhap tac gia moi: ");
+                System.out.print(" - Nhap tac gia moi: ");
                 String name_author = scan.nextLine();
-                System.out.print("Nhap so trang moi: ");
-                int num_page = Integer.parseInt(scan.nextLine());
+                System.out.print(" - Nhap so trang moi: ");
+                int num_page = scan.nextInt();
+                scan.nextLine();
 
                 newDoc = new Book(id, name_nxb, release_num, name_book, name_author, num_page);
             } else if (doc instanceof Magezine) {
                 // Cập nhật cho tạp chí
-                System.out.print("Nhap nha xuat ban moi: ");
+                System.out.print(" - Nhap nha xuat ban moi: ");
                 String name_nxb = scan.nextLine();
-                System.out.print("Nhap so luong phat hanh moi: ");
-                int release_num = Integer.parseInt(scan.nextLine());
-                System.out.print("Nhap ma phat hanh moi: ");
-                int id_release = Integer.parseInt(scan.nextLine());
-                System.out.print("Nhap thang phat hanh moi: ");
-                int month_release = Integer.parseInt(scan.nextLine());
+                System.out.print(" - Nhap so luong phat hanh moi: ");
+                int release_num = scan.nextInt();
+                System.out.print(" - Nhap ma phat hanh moi: ");
+                int id_release = scan.nextInt();
+                System.out.print(" -  - Nhap thang phat hanh moi: ");
+                int month_release = scan.nextInt();
+                scan.nextLine();
 
                 newDoc = new Magezine(id, name_nxb, release_num, id_release, month_release);
             } else if (doc instanceof Newspaper) {
                 // Cập nhật cho báo
-                System.out.print("Nhap nha xuat ban moi: ");
+                System.out.print(" - Nhap nha xuat ban moi: ");
                 String name_nxb = scan.nextLine();
-                System.out.print("Nhap so luong phat hanh moi: ");
-                int release_num = Integer.parseInt(scan.nextLine());
-                System.out.print("Nhap ngay phat hanh moi: ");
-                int day_release = Integer.parseInt(scan.nextLine());
+                System.out.print(" - Nhap so luong phat hanh moi: ");
+                int release_num = scan.nextInt();
+                System.out.print(" - Nhap ngay phat hanh moi: ");
+                int day_release = scan.nextInt();
+                scan.nextLine();
 
                 newDoc = new Newspaper(id, name_nxb, release_num, day_release);
             }
@@ -184,56 +181,60 @@ public class Main {
                 xaptailieu1.editDocument(id, newDoc);  // Gọi phương thức sửa tài liệu
                 System.out.println("Tai lieu da duoc sua thanh cong!");
             } else {
-                System.out.println("Sửa tài liệu không thành công.");
+                System.out.println("Sua tai lieu khong thanh cong!");
             }
         } else {
-            System.out.println("Hủy sửa tài liệu.");
+            System.out.println("Huy sua tai lieu!");
         }
+        System.out.println("-------------------------------------------");
     }
 
     private static void addDocument(Scanner scan, DocumentManagement xaptailieu1) {
-        boolean exit1 = false; // Biến điều khiển vòng lặp cho menu thêm tài liệu
-    
-        while (!exit1) {
-            System.out.println("a/ Them sach vao tai lieu");
-            System.out.println("b/ Them tap chi vao tai lieu");
-            System.out.println("c/ Them bao vao tai lieu");
-            System.out.println("d/ Thoat");
+        boolean exitAdd = false; // Biến điều khiển vòng lặp cho menu thêm tài liệu
+
+        while (!exitAdd) {
+            System.out.println("a. Them sach vao tai lieu");
+            System.out.println("b. Them tap chi vao tai lieu");
+            System.out.println("c. Them bao vao tai lieu");
+            System.out.println("d. Thoat");
             System.out.println();
             System.out.print("Chon chuc nang: ");
-            String option1 = scan.nextLine();
+            String optionAdd = scan.nextLine();
     
-            switch (option1) {
+            switch (optionAdd) {
                 case "a": {
                     System.out.print(" - Nhap ma tai lieu: ");
                     String id = scan.nextLine();
                     System.out.print(" - Nhap nha xuat ban: ");
                     String name_nxb = scan.nextLine();
                     System.out.print(" - Nhap so luong phat hanh: ");
-                    int release_num = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int release_num = scan.nextInt(); // Đọc số nguyên từ người dùng
+                    scan.nextLine();
                     System.out.print(" - Nhap ten sach: ");
                     String name_book = scan.nextLine();
                     System.out.print(" - Nhap tac gia: ");
                     String name_author = scan.nextLine();
                     System.out.print(" - Nhap so trang: ");
-                    int num_page = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int num_page = scan.nextInt();  // Đọc số nguyên từ người dùng
+                    scan.nextLine();
     
                     Document doc = new Book(id, name_nxb, release_num, name_book, name_author, num_page);
                     xaptailieu1.addDocument(doc);  // Thêm tài liệu vào danh sách quản lý
                     System.out.println("Them sach thanh cong!");
                     break;
                 }
-                case "b": {
+                case "b": { 
                     System.out.print(" - Nhap ma tai lieu: ");
                     String id = scan.nextLine();
                     System.out.print(" - Nhap nha xuat ban: ");
                     String name_nxb = scan.nextLine();
                     System.out.print(" - Nhap so luong phat hanh: ");
-                    int release_num = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int release_num = scan.nextInt(); // Đọc số nguyên từ người dùng
                     System.out.print(" - Nhap ma phat hanh: ");
-                    int id_release = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int id_release = scan.nextInt(); // Đọc số nguyên từ người dùng
                     System.out.print(" - Nhap thang phat hanh: ");
-                    int month_release = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int month_release = scan.nextInt(); // Đọc số nguyên từ người dùng
+                    scan.nextLine();
     
                     Document doc = new Magezine(id, name_nxb, release_num, id_release, month_release);
                     xaptailieu1.addDocument(doc);  // Thêm tài liệu vào danh sách quản lý
@@ -246,9 +247,10 @@ public class Main {
                     System.out.print(" - Nhap nha xuat ban: ");
                     String name_nxb = scan.nextLine();
                     System.out.print(" - Nhap so luong phat hanh: ");
-                    int release_num = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int release_num = scan.nextInt();  // Đọc số nguyên từ người dùng
                     System.out.print(" - Nhap ngay phat hanh: ");
-                    int day_release = Integer.parseInt(scan.nextLine());  // Đọc số nguyên từ người dùng
+                    int day_release = scan.nextInt();  // Đọc số nguyên từ người dùng
+                    scan.nextLine();
     
                     Document doc = new Newspaper(id, name_nxb, release_num, day_release);
                     xaptailieu1.addDocument(doc);  // Thêm tài liệu vào danh sách quản lý
@@ -256,7 +258,7 @@ public class Main {
                     break;
                 }
                 case "d": {
-                    exit1 = true;  // Thoát khỏi menu thêm tài liệu
+                    exitAdd = true;  // Thoát khỏi menu thêm tài liệu
                     break;
                 }
                 default: {
@@ -264,55 +266,91 @@ public class Main {
                     break;
                 }
             }
+            System.out.println("-------------------------------------------");
         }
     }
     
 
-    private static void deleteDocument(Scanner scan, DocumentManagement docManagement) {
+    private static void deleteDocument(Scanner scan, DocumentManagement xaptailieu1) {
         System.out.print("Nhap ma tai lieu muon xoa: ");
         String id = scan.nextLine();
-        if (docManagement.removeDocument(id)) {
+        if (xaptailieu1.removeDocument(id)) {
             System.out.println("Xoa tai lieu thanh cong!");
         } else {
             System.out.println("Xoa tai lieu that bai!");
         }
+        System.out.println("-------------------------------------------");
     }
 
-    private static void displayDocuments(DocumentManagement docManagement) {
-        docManagement.displayDocument();
-    }
+    private static void displayDocuments(Scanner scan, DocumentManagement xaptailieu1) {
+        boolean exitDisplay = false;
+        
+        while (!exitDisplay)
+        {
+            System.out.println("a. Hien thi toan bo tai lieu");
+            System.out.println("b. Hien thi tai lieu theo loai");
+            System.out.println("c. Thoat");
+            System.out.println();
+            System.out.print("Chon chuc nang: ");
+            String optionDisplay = scan.nextLine();
 
-    private static void displayDocumentsByType(Scanner scan, DocumentManagement docManagement) {
-        boolean exit = false;
-        while (!exit) {
-            System.out.println("a/ Hien thi sach");
-            System.out.println("b/ Hien thi tap chi");
-            System.out.println("c/ Hien thi bao");
-            System.out.println("d/ Thoat");
-            System.out.print("Chon loai tai lieu can hien thi: ");
-            String option = scan.nextLine();
+            switch (optionDisplay)
+            {
+                case "a": {
+                    xaptailieu1.displayDocument();
+                    break;
+                }
 
-            switch (option) {
-                case "a":
-                    docManagement.searchByBooks();
+                case "b": {
+                    boolean exitDisplayType = false;
+
+                    while (!exitDisplayType)
+                    {
+                        System.out.println("b1. Hien thi sach");
+                        System.out.println("b2. Hien thi bao");
+                        System.out.println("b3. Hien thi tap chi");
+                        System.out.println("b4. Thoat");
+                        System.out.println();
+                        System.out.print("Chon chuc nang: ");
+                        String optionDisplayType = scan.nextLine();
+
+                        switch (optionDisplayType) {
+                            case "b1": {
+                                xaptailieu1.searchByBooks();
+                                break;
+                            }
+                            case "b2": {
+                                xaptailieu1.searchByNewspaper();
+                                break;
+                            }
+                            case "b3": {
+                                xaptailieu1.searchByMagezine();
+                                break;
+                            }
+                            case "b4": {
+                                exitDisplayType = true;
+                                break;
+                            }
+                            default: {
+                                System.out.println("Cu phap khong hop le. Vui long nhap lai!");
+                                break;
+                            }
+                        }
+                        System.out.println("-------------------------------------------");
+                    }
+                }
+
+                case "c": {
+                    exitDisplay = true;
                     break;
-                case "b":
-                    docManagement.searchByMagezine();
+                }
+
+                default : {
+                    System.out.println("Cu phap khong hop le. Vui long nhap lai!");
                     break;
-                case "c":
-                    docManagement.searchByNewspaper();
-                    break;
-                case "d":
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Lua chon khong hop le.");
-                    break;
+                }
             }
+            System.out.println("-------------------------------------------");
         }
-    }
-
-    private static void manageUsers(Scanner scan) {
-        System.out.println("Quan ly tai khoan nguoi dung (Chuc nang chua duoc cai dat).");
     }
 }
