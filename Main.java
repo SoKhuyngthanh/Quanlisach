@@ -17,7 +17,14 @@ public class Main {
         users.put("Vu", new User("Vu", "vu123", Role.USER));                    // Nguoi dung
         users.put("Ha", new User("Ha", "ha123", Role.USER));                    // Nguoi dung
         users.put("Hao", new User("Hao", "hao123", Role.USER));                // Nguoi dung
-
+        
+        // Tai lieu co san trong danh sach sach
+        Document doc1 = new Book("123", "Kim Dong", 20, "Hat giong tam on", "Nguyen Van Phuoc", 200);
+        Document doc2 = new Magezine("234", "Dai hoc Quoc gia", 1400, 41252, "Tap chi khoa hoc", 11);
+        Document doc3 = new Newspaper("345", "Thanh nien", 4000, "Bao Thanh nien", 26, 5, 2024);
+        xaptailieu1.addDocument(doc1);
+        xaptailieu1.addDocument(doc2);
+        xaptailieu1.addDocument(doc3);
         // Quan ly dang nhap
         User currentUser = null;
         boolean isLoggedIn = false;
@@ -37,15 +44,13 @@ public class Main {
                     System.out.println("Dang nhap thanh cong voi quyen " + (currentUser.getRole() == Role.ADMIN ? "Quan tri vien" : "Nguoi dung"));
                 } else {
                     System.out.println("Mat khau khong dung. Vui long thu lai!");
-                    System.out.println("-------------------------------------------");
                 }
             } else {
                 System.out.println("Ten nguoi dung khong ton tai. Vui long thu lai!");
-                System.out.println("-------------------------------------------");
             }
         }
 
-        System.out.println();
+        System.out.println("-------------------------------------------");
 
         // Chuong trinh menu chinh
         boolean exit = false;
@@ -53,8 +58,9 @@ public class Main {
             System.out.println("1. Them tai lieu");
             System.out.println("2. Xoa tai lieu");
             System.out.println("3. Sua tai lieu");
-            System.out.println("4. Hien thi tai lieu");
-            System.out.println("5. Thoat");
+            System.out.println("4. Tim kiem tai lieu");
+            System.out.println("5. Hien thi tai lieu");
+            System.out.println("6. Thoat");
 
             System.out.println();
             System.out.print("Chon chuc nang: ");
@@ -85,11 +91,16 @@ public class Main {
                         System.out.println("Ban khong co quyen sua tai lieu!");
                     }
                     break;
-                case 4: // Hien thi thong tin tai lieu
+
+                case 4:
+                    searchDocuments(scan, xaptailieu1);
+                    break;
+
+                case 5: // Hien thi thong tin tai lieu
                     displayDocuments(scan, xaptailieu1);
                     break;
 
-                case 5: // Thoat
+                case 6: // Thoat
                     exit = true;
                     break;
 
@@ -150,22 +161,31 @@ public class Main {
                 int release_num = scan.nextInt();
                 System.out.print(" - Nhap ma phat hanh moi: ");
                 int id_release = scan.nextInt();
+                scan.nextLine();
+                System.out.print(" - Nhap ten tap chi moi: ");
+                String name_magezine = scan.nextLine();
                 System.out.print(" -  - Nhap thang phat hanh moi: ");
                 int month_release = scan.nextInt();
                 scan.nextLine();
 
-                newDoc = new Magezine(id, name_nxb, release_num, id_release, month_release);
+                newDoc = new Magezine(id, name_nxb, release_num, id_release, name_magezine, month_release);
             } else if (doc instanceof Newspaper) {
                 // Cập nhật cho báo
                 System.out.print(" - Nhap nha xuat ban moi: ");
                 String name_nxb = scan.nextLine();
                 System.out.print(" - Nhap so luong phat hanh moi: ");
                 int release_num = scan.nextInt();
+                System.out.print(" - Nhap tieu de cua bao: ");
+                String title = scan.nextLine();
                 System.out.print(" - Nhap ngay phat hanh moi: ");
                 int day_release = scan.nextInt();
+                System.out.print(" - Nhap thang phat hanh moi: ");
+                int month_release = scan.nextInt();
+                System.out.print(" - Nhap nam phat hanh moi: ");
+                int year_release = scan.nextInt();
                 scan.nextLine();
 
-                newDoc = new Newspaper(id, name_nxb, release_num, day_release);
+                newDoc = new Newspaper(id, name_nxb, release_num, title, day_release, month_release, year_release);
             }
 
             // Thực hiện cập nhật tài liệu mới vào danh sách
@@ -224,11 +244,14 @@ public class Main {
                     int release_num = scan.nextInt(); // Đọc số nguyên từ người dùng
                     System.out.print(" - Nhap ma phat hanh: ");
                     int id_release = scan.nextInt(); // Đọc số nguyên từ người dùng
+                    scan.nextLine();
+                    System.out.print(" - Nhap ten tap chi moi: ");
+                    String name_magezine = scan.nextLine();
                     System.out.print(" - Nhap thang phat hanh: ");
                     int month_release = scan.nextInt(); // Đọc số nguyên từ người dùng
                     scan.nextLine();
     
-                    Document doc = new Magezine(id, name_nxb, release_num, id_release, month_release);
+                    Document doc = new Magezine(id, name_nxb, release_num, id_release, name_magezine, month_release);
                     xaptailieu1.addDocument(doc);  // Thêm tài liệu vào danh sách quản lý
                     System.out.println("Them tap chi thanh cong!");
                     break;
@@ -240,11 +263,17 @@ public class Main {
                     String name_nxb = scan.nextLine();
                     System.out.print(" - Nhap so luong phat hanh: ");
                     int release_num = scan.nextInt();  // Đọc số nguyên từ người dùng
+                    System.out.print(" - Nhap tieu de cua bao: ");
+                    String title = scan.nextLine();
                     System.out.print(" - Nhap ngay phat hanh: ");
                     int day_release = scan.nextInt();  // Đọc số nguyên từ người dùng
+                    System.out.print(" - Nhap thang phat hanh moi: ");
+                    int month_release = scan.nextInt();
+                    System.out.print(" - Nhap nam phat hanh moi: ");
+                    int year_release = scan.nextInt();
                     scan.nextLine();
     
-                    Document doc = new Newspaper(id, name_nxb, release_num, day_release);
+                    Document doc = new Newspaper(id, name_nxb, release_num, title, day_release, month_release, year_release);
                     xaptailieu1.addDocument(doc);  // Thêm tài liệu vào danh sách quản lý
                     System.out.println("Them bao thanh cong!");
                     break;
@@ -271,6 +300,13 @@ public class Main {
         } else {
             System.out.println("Xoa tai lieu that bai!");
         }
+        System.out.println("-------------------------------------------");
+    }
+    
+    private static void searchDocuments(Scanner scan, DocumentManagement xaptailieu1) {
+        System.out.print("Nhap ma tai lieu muon tim kiem: ");
+        String id = scan.nextLine();
+        xaptailieu1.searchDocument(id);
         System.out.println("-------------------------------------------");
     }
 
