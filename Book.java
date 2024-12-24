@@ -45,7 +45,7 @@ public class Book extends Document
     {
         System.out.println("Book: - Id: " + getId());
         System.out.println("      - NXB: " + getName_nxb());
-        System.out.println("      - So ban phat hanh:  " + getNum_page());
+        System.out.println("      - So ban phat hanh:  " + getRelease_num());
         System.out.println("      - Ten sach:  " + getName_book());
         System.out.println("      - Tac gia: " + getName_author());
         System.out.println("      - So trang: " + getNum_page());
