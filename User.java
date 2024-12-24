@@ -13,7 +13,7 @@ public class User {
     }
 
     // Phương thức xác thực người dùng
-    public boolean authenticate(String password) {
+    public boolean kiemtraPassword(String password) {
         return this.password.equals(password);
     }
 
