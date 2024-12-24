@@ -93,14 +93,6 @@ public class Main {
                     exit = true;
                     break;
 
-                case 6: // Quan ly tai khoan nguoi dung (Admin only)
-                    if (currentUser.getRole() == Role.ADMIN) {
-                        manageUsers(scan);
-                    } else {
-                        System.out.println("Ban khong co quyen quan ly tai khoan nguoi dung.");
-                    }
-                    break;
-
                 default:
                     System.out.println("Lua chon khong hop le. Vui long thu lai.");
                     break;
