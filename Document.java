@@ -29,7 +29,7 @@ public class Document
     {
         return this.name_nxb;
     }
-    public void setRelease_num(int release_num)
+    public void setRealease_num(int release_num)
     {
         this.release_num = release_num;
     }
