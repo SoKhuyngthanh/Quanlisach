@@ -13,6 +13,7 @@ public class Document
         this.name_nxb = name_nxb;
         this.release_num = release_num;
     }
+    // Cac getter va settet
     public void setId(String id)
     {
         this.id = id;
@@ -40,25 +41,4 @@ public class Document
     public void display() {}
 } 
 
-/*package quan_ly_sach;
-
-import javax.swing.JTextArea;
-
-public abstract class Document {
-    protected String id;
-    protected String nameNXB;
-    protected int releaseNum;
-
-    public Document(String id, String nameNXB, int releaseNum) {
-        this.id = id;
-        this.nameNXB = nameNXB;
-        this.releaseNum = releaseNum;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public abstract void displayInfo(JTextArea textArea);
-} */
 
