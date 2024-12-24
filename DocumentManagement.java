@@ -24,12 +24,24 @@ public class DocumentManagement
     {
         Document document = this.documents.stream().filter(doc->doc.getId().equals(id)).findFirst().orElse(null);
 
-        if (document == null)
-        {
+        if (document == null) {
             return false;
         }
         this.documents.remove(document);
+
         return true;
+    }
+
+    public void searchDocument(String id)
+    {
+        Document document = this.documents.stream().filter(doc->doc.getId().equals(id)).findFirst().orElse(null);
+
+        if (document == null) {
+            System.out.println("Khong tim thay tai lieu!");
+            return;
+        }
+        System.out.println("Tai lieu da duoc tim thay!");
+        document.display();
     }
 
     public boolean editDocument(String id, Document newDocument) {
@@ -69,29 +81,4 @@ public class DocumentManagement
         this.documents.stream().filter(doc->doc instanceof Newspaper).forEach(doc->doc.display());
     }
 }
- /* 
-package quan_ly_sach;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class DocumentManagement {
-    private List<Document> documents;
-
-    public DocumentManagement() {
-        this.documents = new ArrayList<>();
-    }
-
-    public void addDocument(Document doc) {
-        documents.add(doc);
-        System.out.println("Added document with ID: " + doc.getId());
-    }
-
-    public boolean removeDocument(String id) {
-        return documents.removeIf(doc -> doc.getId().equals(id));
-    }
-
-    public List<Document> getDocuments() {
-        return documents;
-    }
-} */
+ 
